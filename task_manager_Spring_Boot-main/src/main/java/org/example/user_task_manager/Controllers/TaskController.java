@@ -1,7 +1,6 @@
 package org.example.user_task_manager.Controllers;
 
 import org.example.user_task_manager.Entities.Task;
-import org.example.user_task_manager.Entities.User;
 import org.example.user_task_manager.Repositories.TaskRepository;
 import org.example.user_task_manager.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,13 +69,8 @@ public class TaskController {
     @PostMapping
     public String createTask(Task task, Authentication authentication) {
         String username = authentication.getName();
-
-        // Обработка Optional<User>
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        task.setUser(user); // Установить пользователя для задачи
-        taskRepository.save(task); // Сохранить задачу
+        task.setUser(userRepository.findByUsername(username));
+        taskRepository.save(task);
         return "redirect:/tasks";
     }
 
@@ -90,5 +83,6 @@ public class TaskController {
         return "redirect:/tasks";
     }
 }
+
 
 

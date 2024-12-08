@@ -1,91 +1,137 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Профиль пользователя</title>
+  <title>User Profile</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
+      background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 1rem;
+    .container {
+      width: 500px;
+      padding: 40px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-
-    main {
-      margin: 2rem auto;
-      max-width: 600px;
-      background: white;
-      padding: 1.5rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-
-    section {
-      margin-bottom: 1.5rem;
-    }
-
-    h2 {
-      border-bottom: 2px solid #4CAF50;
-      padding-bottom: 0.5rem;
-    }
-
-    button {
-      background-color: #4CAF50;
+    .header a {
+      padding: 10px 20px;
+      background: #007bff;
       color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
     }
-
-    button:hover {
-      background-color: #45a049;
+    .header a:hover {
+      background: #0056b3;
     }
-
-    img.profile-photo {
+    .profile-image {
+      margin-bottom: 20px;
+    }
+    .profile-image img {
       width: 150px;
       height: 150px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 1rem;
+      border: 3px solid #007bff;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .profile-info {
+      text-align: left;
+      margin-top: 20px;
+    }
+    .profile-info label {
+      font-weight: bold;
+      color: #555;
+    }
+    .profile-info p {
+      margin-bottom: 15px;
+      color: #333;
+      font-size: 16px;
+    }
+    .decorative-circle {
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: rgba(179, 157, 219, 0.5);
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+    .upload-section {
+      margin-top: 20px;
+    }
+    .upload-section input {
+      display: block;
+      margin: 10px auto;
+    }
+    .upload-section button {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .upload-section button:hover {
+      background: #0056b3;
     }
   </style>
 </head>
 <body>
-<header>
-  <h1>Профиль пользователя</h1>
-</header>
-<main>
-  <section>
-    <h2>Информация о пользователе</h2>
-    <p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
-    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-    <p><strong>Номер телефона:</strong> <span th:text="${user.phoneNumber}"></span></p>
-    <p><strong>Дата рождения:</strong> <span th:text="${user.birthDate}"></span></p>
-  </section>
+<div class="decorative-circle"></div>
+<div class="container">
+  <div class="header">
+    <a th:href="@{/tasks}">Tasks</a>
+    <a th:href="@{/send-email}">Send Email</a>
+  </div>
+  <div class="profile-image">
+    <img th:src="${user.photoUrl != null ? user.photoUrl : '/default-profile.png'}" alt="Profile Image">
+  </div>
+  <h2>User Profile</h2>
+  <div class="profile-info">
+    <label>Username:</label>
+    <p th:text="${user.username}">JohnDoe</p>
 
-  <section>
-    <h2>Фото пользователя</h2>
-    <!-- Если фото пользователя есть, показываем его, иначе показываем изображение по умолчанию -->
-    <img th:src="${'/static/i.webp'}" alt="Фото пользователя" class="profile-photo">
-  </section>
-  <section>
-    <h2>Добавить/изменить фото</h2>
-    <form action="/profile/upload" method="post" enctype="multipart/form-data">
-      <label for="file">Выберите изображение:</label>
-      <input type="file" id="file" name="file" accept="image/*">
-      <button type="submit">Загрузить</button>
+    <label>Email:</label>
+    <p th:text="${user.email}">johndoe@example.com</p>
+
+    <label>Birth Date:</label>
+    <p th:text="${user.birthDate}">1990-01-01</p>
+
+    <label>Phone Number:</label>
+    <p th:text="${user.phoneNumber}">+123456789</p>
+
+    <label>Gender:</label>
+    <p th:text="${user.gender}">Male</p>
+  </div>
+  <div class="upload-section">
+    <form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+      <label for="photo">Upload Profile Picture:</label>
+      <input type="file" id="photo" name="photo" accept="image/*" required>
+      <button type="submit">Upload</button>
     </form>
-  </section>
-
-  <!-- Кнопка для перехода на страницу задач -->
-  <button onclick="window.location.href='http://localhost:8080/tasks'">Перейти к задачам</button>
-</main>
+  </div>
+</div>
 </body>
 </html>
+
 

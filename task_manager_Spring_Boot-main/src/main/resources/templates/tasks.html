@@ -22,10 +22,13 @@
     }
     .header {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
       margin-bottom: 20px;
+    }
+    .header .auth-buttons, .header .nav-buttons {
+      display: flex;
+      gap: 10px;
     }
     h2 {
       text-align: center;
@@ -103,9 +106,14 @@
 <div class="decorative-square"></div>
 <div class="container">
   <div class="header">
-    <a th:href="@{/login}">Login</a>
-    <a th:href="@{/register}">Register</a>
-    <a th:href="@{/profile}" style="margin-left: auto;">Profile</a> <!-- Кнопка Profile -->
+    <div class="nav-buttons">
+      <a th:href="@{/profile}">Profile</a>
+      <a th:href="@{/send-email}">Send Email</a>
+    </div>
+    <div class="auth-buttons">
+      <a th:href="@{/login}">Login</a>
+      <a th:href="@{/register}">Register</a>
+    </div>
   </div>
   <h2>Your Tasks</h2>
   <div class="actions">
@@ -153,4 +161,6 @@
 </div>
 </body>
 </html>
+
+
 
