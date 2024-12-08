@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Профиль пользователя</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    main {
+      margin: 2rem auto;
+      max-width: 600px;
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    section {
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 0.5rem;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    img.profile-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Профиль пользователя</h1>
+</header>
+<main>
+  <section>
+    <h2>Информация о пользователе</h2>
+    <p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p><strong>Номер телефона:</strong> <span th:text="${user.phoneNumber}"></span></p>
+    <p><strong>Дата рождения:</strong> <span th:text="${user.birthDate}"></span></p>
+  </section>
+
+  <section>
+    <h2>Фото пользователя</h2>
+    <!-- Если фото пользователя есть, показываем его, иначе показываем изображение по умолчанию -->
+    <img th:src="${'/static/i.webp'}" alt="Фото пользователя" class="profile-photo">
+  </section>
+  <section>
+    <h2>Добавить/изменить фото</h2>
+    <form action="/profile/upload" method="post" enctype="multipart/form-data">
+      <label for="file">Выберите изображение:</label>
+      <input type="file" id="file" name="file" accept="image/*">
+      <button type="submit">Загрузить</button>
+    </form>
+  </section>
+
+  <!-- Кнопка для перехода на страницу задач -->
+  <button onclick="window.location.href='http://localhost:8080/tasks'">Перейти к задачам</button>
+</main>
+</body>
+</html>
+

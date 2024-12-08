@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Your Tasks</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #89f7fe, #66a6ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 800px;
+      padding: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .actions {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    a {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    a:hover {
+      background: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+    td a {
+      background: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    td a:hover {
+      background: #c82333;
+    }
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .pagination a {
+      margin: 0 5px;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: white;
+      background: #007bff;
+      border-radius: 5px;
+    }
+    .pagination a:hover {
+      background: #0056b3;
+    }
+    .decorative-square {
+      position: absolute;
+      bottom: -150px;
+      left: -100px;
+      width: 200px;
+      height: 200px;
+      background: rgba(135, 206, 235, 0.5);
+      filter: blur(40px);
+      transform: rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+<div class="decorative-square"></div>
+<div class="container">
+  <div class="header">
+    <a th:href="@{/login}">Login</a>
+    <a th:href="@{/register}">Register</a>
+    <a th:href="@{/profile}" style="margin-left: auto;">Profile</a> <!-- Кнопка Profile -->
+  </div>
+  <h2>Your Tasks</h2>
+  <div class="actions">
+    <form method="get" action="/tasks" style="display: inline-block; margin-right: 10px;">
+      <input type="text" name="search" placeholder="Search tasks..." th:value="${search}" />
+      <button type="submit">Search</button>
+    </form>
+    <form method="get" action="/tasks" style="display: inline-block;">
+      <select name="filter">
+        <option value="" th:selected="${filter == null}">All</option>
+        <option value="Completed" th:selected="${filter == 'Completed'}">Completed</option>
+        <option value="Pending" th:selected="${filter == 'Pending'}">Pending</option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+    <a th:href="@{/tasks/new}">Create New Task</a>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+      <td th:text="${task.title}">Task Title</td>
+      <td th:text="${task.description}">Task Description</td>
+      <td th:text="${task.status}">Task Status</td>
+      <td th:text="${task.priority}">Task Priority</td>
+      <td>
+        <a th:href="@{/tasks/delete/{id}(id=${task.id})}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <a th:if="${currentPage > 0}" th:href="@{/tasks(page=${currentPage - 1}, size=${size}, search=${search}, filter=${filter})}">Previous</a>
+    <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+    <a th:if="${currentPage + 1 < totalPages}" th:href="@{/tasks(page=${currentPage + 1}, size=${size}, search=${search}, filter=${filter})}">Next</a>
+  </div>
+</div>
+</body>
+</html>
+
